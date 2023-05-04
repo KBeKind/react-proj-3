@@ -11,9 +11,11 @@ function BattleButtonContainer() {
 
   return (
     <>
-      <h1>Pick Your Next Moves</h1>
-      <div className="container text-center">
+      <h1 className="text-center">Pick Your Next Moves</h1>
+      <div className="container text-center border border-secondary border-3 rounded p-3 ">
         <div className="row">
+          {" "}
+          ⚔️
           {attackArray.map((action, index) => (
             <div className="col">
               <button
@@ -30,7 +32,9 @@ function BattleButtonContainer() {
             </div>
           ))}
         </div>
+        <hr />
         <div className="row">
+          🛡
           {defenseArray.map((action, index) => (
             <div className="col">
               <button
