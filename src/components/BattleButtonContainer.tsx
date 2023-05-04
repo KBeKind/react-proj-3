@@ -1,7 +1,5 @@
 import { useState } from "react";
 
-import BattleButton from "./BattleButton";
-
 function BattleButtonContainer() {
   const attackArray = ["Sword", "Arrow", "Fireball"];
   const defenseArray = ["Dodge", "Shield Block", "Frost Aura"];
