@@ -1,21 +1,52 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import BattleButton from "./BattleButton";
 
 function BattleButtonContainer() {
-  const actionArray = ["at1", "at2", "at3", "df1", "df2", "df3"];
-  const [actionIndex, setActionIndex] = useState<number>(0);
+  const attackArray = ["Sword", "Arrow", "Fireball"];
+  const defenseArray = ["Dodge", "Shield Block", "Frost Aura"];
+
+  const [selectedAttack, setSelectedAttack] = useState(-1);
+  const [selectedDefense, setSelectedDefense] = useState(-1);
 
   return (
     <>
       <h1>Pick Your Next Moves</h1>
-      <div className="card">
-        {actionArray.map((action, i) => (
-          <BattleButton key={i} actionIndex={actionIndex}>
-            {action}
-          </BattleButton>
-        ))}
-        <p></p>
+      <div className="container text-center">
+        <div className="row">
+          {attackArray.map((action, index) => (
+            <div className="col">
+              <button
+                className={
+                  selectedAttack === index
+                    ? "btn btn-danger "
+                    : "btn btn-secondary"
+                }
+                onClick={() => setSelectedAttack(index)}
+                key={action}
+              >
+                {action}
+              </button>
+            </div>
+          ))}
+        </div>
+        <div className="row">
+          {defenseArray.map((action, index) => (
+            <div className="col">
+              <button
+                className={
+                  selectedDefense === index
+                    ? "btn btn-danger"
+                    : "btn btn-secondary"
+                }
+                onClick={() => setSelectedDefense(index)}
+                key={action}
+              >
+                {action}
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
     </>
   );
