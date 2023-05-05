@@ -10,6 +10,12 @@ function BattleButtonContainer() {
   const [selectedAttack, setSelectedAttack] = useState(-1);
   const [selectedDefense, setSelectedDefense] = useState(-1);
 
+  const [lastOpponentAttack, setLastOpponentAttack] = useState(-1);
+  const [lastOpponentDefense, setLastOpponentDefense] = useState(-1);
+
+  const [lastUserAttack, setLastUserAttack] = useState(-1);
+  const [lastUserDefense, setLastUserDefense] = useState(-1);
+
   const [userHealthMessage, setUserHealthMessage] = useState("Alive");
   const [opponentHealthMessage, setOpponentHealthMessage] = useState("Alive");
 
@@ -17,11 +23,22 @@ function BattleButtonContainer() {
     <>
       <h2>
         Opponent Health Status: {opponentHealth} {opponentHealthMessage}
+        <br />
+        Opponent Actions:
+        <br />
+        attack:{attackArray[lastOpponentAttack]}
+        <br />
+        defense:{defenseArray[lastOpponentDefense]}
       </h2>
       <h2>
         User Health Status: {userHealth} {userHealthMessage}
+        <br />
+        User Actions:
+        <br />
+        attack:{attackArray[lastUserAttack]}
+        <br />
+        defense:{defenseArray[lastUserDefense]}
       </h2>
-
       <h1 className="text-center">Pick Your Next Moves</h1>
       <div className="container text-center border border-secondary border-3 rounded p-3 ">
         <div className="row">
@@ -68,14 +85,23 @@ function BattleButtonContainer() {
           <button
             className="btn btn-success"
             onClick={() => {
-              setUserHealth(startUserRound(selectedDefense, userHealth));
+              setLastUserAttack(selectedAttack);
+              setLastUserDefense(selectedDefense);
+              setLastOpponentAttack(Math.floor(Math.random() * (2 - 0 + 1)));
+              setLastOpponentDefense(Math.floor(Math.random() * (2 - 0 + 1)));
+              setUserHealth(
+                startUserRound(selectedDefense, userHealth, lastOpponentAttack)
+              );
               setOpponentHealth(
-                startOpponentRound(selectedAttack, opponentHealth)
+                startOpponentRound(
+                  selectedAttack,
+                  opponentHealth,
+                  lastOpponentDefense
+                )
               );
 
               setOpponentHealthMessage(checkHealth(opponentHealth));
               setUserHealthMessage(checkHealth(userHealth));
-              //THAT HAS A BUG DOESNT NOTICE DEATH UNTIL NEXT ATTACK
             }}
           >
             Ready
@@ -93,14 +119,12 @@ function checkHealth(health: number) {
   return "Alive";
 }
 
-function startUserRound(defense: number, health: number) {
+function startUserRound(defense: number, health: number, attack: number) {
   const userDefense = defense;
 
-  const opponentAttack = Math.floor(Math.random() * (2 - 0 + 1)) + 0;
-
-  if (opponentAttack === userDefense) {
+  if (attack === userDefense) {
     //user takes no damage
-  } else if (opponentAttack === 0) {
+  } else if (attack === 0) {
     if (userDefense === 1) {
       health--;
       //user takes 1 damage
@@ -108,7 +132,7 @@ function startUserRound(defense: number, health: number) {
       //user takes 2 damage
       health -= 2;
     }
-  } else if (opponentAttack === 1) {
+  } else if (attack === 1) {
     if (userDefense === 2) {
       //user takes 1 damage
       health--;
@@ -116,7 +140,7 @@ function startUserRound(defense: number, health: number) {
       //user takes 2 damage
       health -= 2;
     }
-  } else if (opponentAttack === 2) {
+  } else if (attack === 2) {
     if (userDefense === 0) {
       //user takes 1 damage
       health--;
@@ -129,34 +153,32 @@ function startUserRound(defense: number, health: number) {
   return health;
 }
 
-function startOpponentRound(attack: number, health: number) {
+function startOpponentRound(attack: number, health: number, defense: number) {
   const userAttack = attack;
 
-  const opponentDefense = Math.floor(Math.random() * (2 - 0 + 1)) + 0;
-
-  if (userAttack === opponentDefense) {
+  if (userAttack === defense) {
     //opponent takes no damage
   } else if (userAttack === 0) {
-    if (opponentDefense === 1) {
+    if (defense === 1) {
       //opponent takes 1 damage
       health--;
-    } else if (opponentDefense === 2) {
+    } else if (defense === 2) {
       //opponent takes 2 damage
       health -= 2;
     }
   } else if (userAttack === 1) {
-    if (opponentDefense === 2) {
+    if (defense === 2) {
       //opponent takes 1 damage
       health--;
-    } else if (opponentDefense === 0) {
+    } else if (defense === 0) {
       //opponent takes 2 damage
       health -= 2;
     }
   } else if (userAttack === 2) {
-    if (opponentDefense === 0) {
+    if (defense === 0) {
       //opponent takes 1 damage
       health--;
-    } else if (opponentDefense === 1) {
+    } else if (defense === 1) {
       //opponent takes 2 damage
       health -= 2;
     }
